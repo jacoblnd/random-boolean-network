@@ -1,30 +1,7 @@
 from PIL import Image
-import random
 import math
 
 from network import Network, edge_algorithm_uniform
-
-def generate_sample_image():
-    # Define image dimensions
-    width = 256
-    height = 256
-    black = 0
-    white = 255
-
-    # Create a new RGB image (you can also use "L" for grayscale)
-    image = Image.new("L", (width, height))
-
-    # Access pixel data
-    pixels = image.load()
-
-    # Iterate through pixels and set colors (example: gradient)
-    for y in range(height):
-        for x in range(width):
-            pixels[x, y] = white if random.choice([True, False]) else black
-
-    # Save the image as a BMP file
-    image.save("gradient_bitmap.bmp")
-
 
 def generate_image_slice(node_states: list[int]):
     return [0 if node_state == 0 else 255 for node_state in node_states]
@@ -42,7 +19,7 @@ def get_disturbance_time_slices(
     disturbance_period = math.floor(total_time_slices / (num_disturbances+1))
     current_disturbance_slice = disturbance_period
     disturbance_times = [current_disturbance_slice]
-    for i in range(num_disturbances - 1):
+    for _ in range(num_disturbances - 1):
         current_disturbance_slice += disturbance_period
         disturbance_times.append(current_disturbance_slice)
     return disturbance_times
@@ -75,10 +52,10 @@ def generate_image(
 
 
 def main():
-    network = Network(200, 200, edge_algorithm=edge_algorithm_uniform, node_rule_activation_probability=0.1)
+    network = Network(40, 400, edge_algorithm=edge_algorithm_uniform, node_rule_activation_probability=0.5)
     network.print_stats()
     # print(network.adjacency_list)
-    generate_image(network, 400, num_disturbances=4, disturbance_factor=0.1)
+    generate_image(network, 2000, num_disturbances=4, disturbance_factor=0.0)
    
 if __name__ == "__main__":
     main()
